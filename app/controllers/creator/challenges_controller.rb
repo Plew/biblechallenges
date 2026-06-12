@@ -1,8 +1,7 @@
 class Creator::ChallengesController < ApplicationController
   before_filter :authenticate_user!, except: [:show]
-  before_filter :find_challenge, only: [:show, :destroy, :edit, :update, :snapshot_email]
-  before_action :validate_ownership, only: [:show, :edit, :destroy, :update]
-
+  before_filter :find_challenge, only: [:show, :destroy, :edit, :update, :snapshot_email, :export_readings]
+  before_action :validate_ownership, only: [:show, :edit, :destroy, :update, :export_readings]
   def new
     @challenge = Challenge.new
   end
@@ -91,6 +90,15 @@ class Creator::ChallengesController < ApplicationController
     @challenge.send_challenge_snapshot_email_to_members
     flash[:notice] = "Successfully sent snapshot email to challenge members." 
     redirect_to :back
+  end
+
+  def export_readings
+    @challenge = Challenge.friendly.find(params[:id])
+    
+    csv_data = ChallengeReadingsExport.new(@challenge).to_csv
+    send_data csv_data, 
+              filename: "#{@challenge.name.parameterize}-readings-#{Date.today}.csv", 
+              type: 'text/csv'
   end
 
   private

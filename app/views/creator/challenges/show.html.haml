@@ -16,6 +16,7 @@
   %br
   = link_to "Edit", edit_creator_challenge_path(@challenge), :class=>"btn btn-default"
   = render partial: 'shared/challenges/invite_friends'
+  = link_to "Download Reading Stats (CSV)", export_readings_creator_challenge_path(@challenge), class: 'btn btn-primary'
 
   .panel.panel-primary
     .panel-heading

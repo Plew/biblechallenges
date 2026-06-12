@@ -27,6 +27,7 @@ Biblechallenge::Application.routes.draw do
       resources :groups, only: [:new, :create, :edit]
       member do
         get 'snapshot_email'
+        get 'export_readings'
       end
       resources :mass_emails, only: [:new, :create]
       get 'toggle'
